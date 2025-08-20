@@ -1,6 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import BigInteger, Text, Boolean, TIMESTAMP, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import BigInteger, Text, Boolean, TIMESTAMP, ForeignKey, JSON 
 from datetime import datetime
 
 class Base(DeclarativeBase): pass
@@ -25,7 +24,7 @@ class Event(Base):
     experiment_id: Mapped[int] = mapped_column(ForeignKey("experiments.id", ondelete="CASCADE"))
     upload_id: Mapped[int] = mapped_column(ForeignKey("uploads.id", ondelete="CASCADE"))
     user_id: Mapped[str] = mapped_column(Text)
-    variant: Mapped[str] = mapped_column(Text)          # 'control','treatment',...
+    variant: Mapped[str] = mapped_column(Text)         
     converted: Mapped[bool] = mapped_column(Boolean)
     ts: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
-    attrs: Mapped[dict] = mapped_column(JSONB if JSONB else Text, default={})  # JSONB in Postgres; string fallback in SQLite
+    attrs: Mapped[dict] = mapped_column(JSON, default=dict)  
